@@ -36,7 +36,7 @@ class ReversiBack {
         reset()
     }
 
-    private fun getPossibleMoves(pieceBox: MutableMap<Square, Char>, possibleMoves: MutableMap<Square, Int>) {
+    fun getPossibleMoves(pieceBox: MutableMap<Square, Char>, possibleMoves: MutableMap<Square, Int>) {
         var addMove: Boolean
         var k: Int
         for (i in 0..7)
@@ -368,7 +368,7 @@ class ReversiBack {
     }
 
     fun moveFromAI() {
-        Log.d(TAG, "successfulMove = $successfulMove, skipTurn = $skipTurn, whiteTurn = $whiteTurn")
+      //  Log.d(TAG, "successfulMove = $successfulMove, skipTurn = $skipTurn, whiteTurn = $whiteTurn")
         if (skipTurn) {
             this.whiteTurn = !whiteTurn
             getPossibleMoves(pieceBox, possibleMoves)
@@ -395,19 +395,17 @@ class ReversiBack {
                 val newBoardValue = mutableListOf<Int>()
                 newBoardValue.add(boardValue[0])
                 moveFromPlayer(move.key, newPieceBox, newPossibleMoves, rememberWhiteTurn, newBlackDisks, newWhiteDisks, newBoardValue, false)
-                val scoreAI = minimax(pieceBox, possibleMoves, whiteDisks, blackDisks, boardValue, 5, Int.MIN_VALUE, Int.MAX_VALUE, whiteTurn)
+                val scoreAI = minimax(pieceBox, possibleMoves, whiteDisks, blackDisks, boardValue, 4, Int.MIN_VALUE, Int.MAX_VALUE, whiteTurn)
                 if (rememberWhiteTurn) if (scoreAI > bestScore) {
                     bestScore = scoreAI
                     bestMove = move.key
-                    break
                 }
                 if (!rememberWhiteTurn) if (scoreAI < bestScore) {
                     bestScore = scoreAI
                     bestMove = move.key
-                    break
                 }
             }
-            Log.d(TAG, "moveAI = $bestScore, $bestMove")
+       //     Log.d(TAG, "moveAI = $bestScore, $bestMove")
                    whiteTurn = rememberWhiteTurn
             inCycle = false
             moveFromPlayer(bestMove, pieceBox, possibleMoves, whiteTurn, blackDisks, whiteDisks, boardValue, true)

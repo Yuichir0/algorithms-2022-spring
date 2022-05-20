@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity(), ReversiConnector {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Log.d(TAG, "$reversiBack")
+        //Log.d(TAG, "$reversiBack")
         val reversiFront: ReversiFront = findViewById(R.id.chess_view)
         reversiFront.reversiConnector = this
         findViewById<Button>(R.id.reset_button).setOnClickListener {
