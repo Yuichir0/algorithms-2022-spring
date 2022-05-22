@@ -44,11 +44,36 @@ class MainActivity : AppCompatActivity(), ReversiConnector {
     }
 
     override fun moveFromPlayer(moveFromPlayer: Square) {
-        reversiBack.moveFromPlayer(Square(moveFromPlayer.x, moveFromPlayer.y), reversiBack.pieceBox, reversiBack.possibleMoves, reversiBack.whiteTurn, reversiBack.blackDisks, reversiBack.whiteDisks, reversiBack.boardValue, true)
-        if (reversiBack.announceWhiteWin) Toast.makeText(applicationContext, "White win! \nBlack Disks = ${reversiBack.blackDisks[0]}, White Disks = ${reversiBack.whiteDisks[0]}", Toast.LENGTH_LONG).show()
-        if (reversiBack.announceBlackWin) Toast.makeText(applicationContext, "Black win! \nBlack Disks = ${reversiBack.blackDisks[0]}, White Disks = ${reversiBack.whiteDisks[0]}", Toast.LENGTH_LONG).show()
-        if (reversiBack.announcePat) Toast.makeText(applicationContext, "Everyone lost! \nBlack Disks = ${reversiBack.blackDisks[0]}, White Disks = ${reversiBack.whiteDisks[0]}", Toast.LENGTH_LONG).show()
-        if (!reversiBack.announceWhiteWin && !reversiBack.announceBlackWin && !reversiBack.announcePat && reversiBack.skipTurn) Toast.makeText(applicationContext, "No possible moves, skip turn", Toast.LENGTH_SHORT).show()
+        reversiBack.moveFromPlayer(
+            Square(moveFromPlayer.x, moveFromPlayer.y),
+            reversiBack.pieceBox,
+            reversiBack.possibleMoves,
+            reversiBack.whiteTurn,
+            reversiBack.blackDisks,
+            reversiBack.whiteDisks,
+            reversiBack.boardValue,
+            true
+        )
+        if (reversiBack.announceWhiteWin) Toast.makeText(
+            applicationContext,
+            "White win! \nBlack Disks = ${reversiBack.blackDisks[0]}, White Disks = ${reversiBack.whiteDisks[0]}",
+            Toast.LENGTH_LONG
+        ).show()
+        if (reversiBack.announceBlackWin) Toast.makeText(
+            applicationContext,
+            "Black win! \nBlack Disks = ${reversiBack.blackDisks[0]}, White Disks = ${reversiBack.whiteDisks[0]}",
+            Toast.LENGTH_LONG
+        ).show()
+        if (reversiBack.announcePat) Toast.makeText(
+            applicationContext,
+            "Everyone lost! \nBlack Disks = ${reversiBack.blackDisks[0]}, White Disks = ${reversiBack.whiteDisks[0]}",
+            Toast.LENGTH_LONG
+        ).show()
+        if (!reversiBack.announceWhiteWin && !reversiBack.announceBlackWin && !reversiBack.announcePat && reversiBack.skipTurn) Toast.makeText(
+            applicationContext,
+            "No possible moves, skip turn",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     override fun returnPossibleMoves(): MutableMap<Square, Int> {

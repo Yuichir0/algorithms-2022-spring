@@ -22,26 +22,29 @@ class ReversiBack {
     private var inCycle = false
     private var successfulMove = false
     private val pieceValue = mapOf(
-        Pair(Square(0,0), 20000), Pair(Square(1,0), -3000), Pair(Square(2,0), 1000), Pair(Square(3,0), 800), Pair(Square(4,0), 800), Pair(Square(5,0), 1000), Pair(Square(6,0), -3000), Pair(Square(7,0), 20000),
-        Pair(Square(0,1), -3000), Pair(Square(1,1), -5000), Pair(Square(2,1), -450), Pair(Square(3,1), -500), Pair(Square(4,1), -500), Pair(Square(5,1), -450), Pair(Square(6,1), -5000), Pair(Square(7,1), -3000),
-        Pair(Square(0,2), 1000), Pair(Square(1,2), -450), Pair(Square(2,2), 30), Pair(Square(3,2), 10), Pair(Square(4,2), 10), Pair(Square(5,2), 30), Pair(Square(6,2), -450), Pair(Square(7,2), 1000),
-        Pair(Square(0,3), 800), Pair(Square(1,3), -500), Pair(Square(2,3), 10), Pair(Square(3,3), 50), Pair(Square(4,3), 50), Pair(Square(5,3), 10), Pair(Square(6,3), -500), Pair(Square(7,3), 800),
-        Pair(Square(0,4), 800), Pair(Square(1,4), -500), Pair(Square(2,4), 10), Pair(Square(3,4), 50), Pair(Square(4,4), 50), Pair(Square(5,4), 10), Pair(Square(6,4), -500), Pair(Square(7,4), 800),
-        Pair(Square(0,5), 1000), Pair(Square(1,5), -450), Pair(Square(2,5), 30), Pair(Square(3,5), 10), Pair(Square(4,5), 10), Pair(Square(5,5), 30), Pair(Square(6,5), -450), Pair(Square(7,5), 1000),
-        Pair(Square(0,6), -3000), Pair(Square(1,6), -5000), Pair(Square(2,6), -450), Pair(Square(3,6), -500), Pair(Square(4,6), -500), Pair(Square(5,6), -450), Pair(Square(6,6), -5000), Pair(Square(7,6), -3000),
-        Pair(Square(0,7), 20000), Pair(Square(1,7), -3000), Pair(Square(2,7), 1000), Pair(Square(3,7), 800), Pair(Square(4,7), 800), Pair(Square(5,7), 1000), Pair(Square(6,7), -3000), Pair(Square(7,7), 20000),
+        Pair(Square(0, 0), 20000), Pair(Square(1, 0), -3000), Pair(Square(2, 0), 1000), Pair(Square(3, 0), 800), Pair(Square(4, 0), 800), Pair(Square(5, 0), 1000), Pair(Square(6, 0), -3000), Pair(Square(7, 0), 20000),
+        Pair(Square(0, 1), -3000), Pair(Square(1, 1), -5000), Pair(Square(2, 1), -450), Pair(Square(3, 1), -500), Pair(Square(4, 1), -500), Pair(Square(5, 1), -450), Pair(Square(6, 1), -5000), Pair(Square(7, 1), -3000),
+        Pair(Square(0, 2), 1000), Pair(Square(1, 2), -450), Pair(Square(2, 2), 30), Pair(Square(3, 2), 10), Pair(Square(4, 2), 10), Pair(Square(5, 2), 30), Pair(Square(6, 2), -450), Pair(Square(7, 2), 1000),
+        Pair(Square(0, 3), 800), Pair(Square(1, 3), -500), Pair(Square(2, 3), 10), Pair(Square(3, 3), 50), Pair(Square(4, 3), 50), Pair(Square(5, 3), 10), Pair(Square(6, 3), -500), Pair(Square(7, 3), 800),
+        Pair(Square(0, 4), 800), Pair(Square(1, 4), -500), Pair(Square(2, 4), 10), Pair(Square(3, 4), 50), Pair(Square(4, 4), 50), Pair(Square(5, 4), 10), Pair(Square(6, 4), -500), Pair(Square(7, 4), 800),
+        Pair(Square(0, 5), 1000), Pair(Square(1, 5), -450), Pair(Square(2, 5), 30), Pair(Square(3, 5), 10), Pair(Square(4, 5), 10), Pair(Square(5, 5), 30), Pair(Square(6, 5), -450), Pair(Square(7, 5), 1000),
+        Pair(Square(0, 6), -3000), Pair(Square(1, 6), -5000), Pair(Square(2, 6), -450), Pair(Square(3, 6), -500), Pair(Square(4, 6), -500), Pair(Square(5, 6), -450), Pair(Square(6, 6), -5000), Pair(Square(7, 6), -3000),
+        Pair(Square(0, 7), 20000), Pair(Square(1, 7), -3000), Pair(Square(2, 7), 1000), Pair(Square(3, 7), 800), Pair(Square(4, 7), 800), Pair(Square(5, 7), 1000), Pair(Square(6, 7), -3000), Pair(Square(7, 7), 20000),
     )
 
     init {
         restart()
     }
 
-    fun getPossibleMoves(pieceBox: MutableMap<Square, Char>, possibleMoves: MutableMap<Square, Int>) {
+    fun getPossibleMoves(
+        pieceBox: MutableMap<Square, Char>,
+        possibleMoves: MutableMap<Square, Int>
+    ) {
         var addMove: Boolean
         var k: Int
         for (i in 0..7)
             for (j in 0..7) {
-                if (pieceBox[Square(i,j)] == '0' && whiteTurn) {
+                if (pieceBox[Square(i, j)] == '0' && whiteTurn) {
                     k = 1 // Проверка вправо
                     addMove = false
                     while (i + k <= 7 && pieceBox[Square(i + k, j)] == 'B') {
@@ -58,7 +61,8 @@ class ReversiBack {
                         k++
                     }
                     if (i - k >= 0 && addMove && pieceBox[Square(i - k, j)] == 'W') {
-                        possibleMoves[Square(i, j)] = possibleMoves.getOrElse(Square(i, j)) {0} + 10
+                        possibleMoves[Square(i, j)] =
+                            possibleMoves.getOrElse(Square(i, j)) { 0 } + 10
                     }
                     k = 1 // Проверка вверх
                     addMove = false
@@ -67,7 +71,8 @@ class ReversiBack {
                         k++
                     }
                     if (j + k <= 7 && addMove && pieceBox[Square(i, j + k)] == 'W') {
-                        possibleMoves[Square(i, j)] = possibleMoves.getOrElse(Square(i, j)) {0} + 100
+                        possibleMoves[Square(i, j)] =
+                            possibleMoves.getOrElse(Square(i, j)) { 0 } + 100
                     }
                     k = 1 // Проверка вниз
                     addMove = false
@@ -76,7 +81,8 @@ class ReversiBack {
                         k++
                     }
                     if (j - k >= 0 && addMove && pieceBox[Square(i, j - k)] == 'W') {
-                        possibleMoves[Square(i, j)] = possibleMoves.getOrElse(Square(i, j)) {0} + 1000
+                        possibleMoves[Square(i, j)] =
+                            possibleMoves.getOrElse(Square(i, j)) { 0 } + 1000
                     }
                     k = 1 // Проверка вправо-вверх
                     addMove = false
@@ -84,8 +90,13 @@ class ReversiBack {
                         addMove = true
                         k++
                     }
-                    if (i + k <= 7 && j + k <= 7 && addMove && pieceBox[Square(i + k, j + k)] == 'W') {
-                        possibleMoves[Square(i, j)] = possibleMoves.getOrElse(Square(i, j)) {0} + 10000
+                    if (i + k <= 7 && j + k <= 7 && addMove && pieceBox[Square(
+                            i + k,
+                            j + k
+                        )] == 'W'
+                    ) {
+                        possibleMoves[Square(i, j)] =
+                            possibleMoves.getOrElse(Square(i, j)) { 0 } + 10000
                     }
                     k = 1 // Проверка влево-вверх
                     addMove = false
@@ -93,8 +104,13 @@ class ReversiBack {
                         addMove = true
                         k++
                     }
-                    if (i - k >= 0 && j + k <= 7 && addMove && pieceBox[Square(i - k, j + k)] == 'W') {
-                        possibleMoves[Square(i, j)] = possibleMoves.getOrElse(Square(i, j)) {0} + 100000
+                    if (i - k >= 0 && j + k <= 7 && addMove && pieceBox[Square(
+                            i - k,
+                            j + k
+                        )] == 'W'
+                    ) {
+                        possibleMoves[Square(i, j)] =
+                            possibleMoves.getOrElse(Square(i, j)) { 0 } + 100000
                     }
                     k = 1 // Проверка вправо-вниз
                     addMove = false
@@ -102,8 +118,13 @@ class ReversiBack {
                         addMove = true
                         k++
                     }
-                    if (i + k <= 7 && j - k >= 0 && addMove && pieceBox[Square(i + k, j - k)] == 'W') {
-                        possibleMoves[Square(i, j)] = possibleMoves.getOrElse(Square(i, j)) {0} + 1000000
+                    if (i + k <= 7 && j - k >= 0 && addMove && pieceBox[Square(
+                            i + k,
+                            j - k
+                        )] == 'W'
+                    ) {
+                        possibleMoves[Square(i, j)] =
+                            possibleMoves.getOrElse(Square(i, j)) { 0 } + 1000000
                     }
                     k = 1 // Проверка влево-вниз
                     addMove = false
@@ -111,12 +132,17 @@ class ReversiBack {
                         addMove = true
                         k++
                     }
-                    if (i - k >= 0 && j - k >= 0 && addMove && pieceBox[Square(i - k, j - k)] == 'W') {
-                        possibleMoves[Square(i, j)] = possibleMoves.getOrElse(Square(i, j)) {0} + 10000000
+                    if (i - k >= 0 && j - k >= 0 && addMove && pieceBox[Square(
+                            i - k,
+                            j - k
+                        )] == 'W'
+                    ) {
+                        possibleMoves[Square(i, j)] =
+                            possibleMoves.getOrElse(Square(i, j)) { 0 } + 10000000
                     }
                 }
 
-                if (pieceBox[Square(i,j)] == '0' && !whiteTurn) {
+                if (pieceBox[Square(i, j)] == '0' && !whiteTurn) {
                     k = 1 // Проверка вправо
                     addMove = false
                     while (i + k <= 7 && pieceBox[Square(i + k, j)] == 'W') {
@@ -133,7 +159,8 @@ class ReversiBack {
                         k++
                     }
                     if (i - k >= 0 && addMove && pieceBox[Square(i - k, j)] == 'B') {
-                        possibleMoves[Square(i, j)] = possibleMoves.getOrElse(Square(i, j)) {0} + 10
+                        possibleMoves[Square(i, j)] =
+                            possibleMoves.getOrElse(Square(i, j)) { 0 } + 10
                     }
                     k = 1 // Проверка вверх
                     addMove = false
@@ -142,7 +169,8 @@ class ReversiBack {
                         k++
                     }
                     if (j + k <= 7 && addMove && pieceBox[Square(i, j + k)] == 'B') {
-                        possibleMoves[Square(i, j)] = possibleMoves.getOrElse(Square(i, j)) {0} + 100
+                        possibleMoves[Square(i, j)] =
+                            possibleMoves.getOrElse(Square(i, j)) { 0 } + 100
                     }
                     k = 1 // Проверка вниз
                     addMove = false
@@ -151,7 +179,8 @@ class ReversiBack {
                         k++
                     }
                     if (j - k >= 0 && addMove && pieceBox[Square(i, j - k)] == 'B') {
-                        possibleMoves[Square(i, j)] = possibleMoves.getOrElse(Square(i, j)) {0} + 1000
+                        possibleMoves[Square(i, j)] =
+                            possibleMoves.getOrElse(Square(i, j)) { 0 } + 1000
                     }
                     k = 1 // Проверка вправо-вверх
                     addMove = false
@@ -159,8 +188,13 @@ class ReversiBack {
                         addMove = true
                         k++
                     }
-                    if (i + k <= 7 && j + k <= 7 && addMove && pieceBox[Square(i + k, j + k)] == 'B') {
-                        possibleMoves[Square(i, j)] = possibleMoves.getOrElse(Square(i, j)) {0} + 10000
+                    if (i + k <= 7 && j + k <= 7 && addMove && pieceBox[Square(
+                            i + k,
+                            j + k
+                        )] == 'B'
+                    ) {
+                        possibleMoves[Square(i, j)] =
+                            possibleMoves.getOrElse(Square(i, j)) { 0 } + 10000
                     }
                     k = 1 // Проверка влево-вверх
                     addMove = false
@@ -168,8 +202,13 @@ class ReversiBack {
                         addMove = true
                         k++
                     }
-                    if (i - k >= 0 && j + k <= 7 && addMove && pieceBox[Square(i - k, j + k)] == 'B') {
-                        possibleMoves[Square(i, j)] = possibleMoves.getOrElse(Square(i, j)) {0} + 100000
+                    if (i - k >= 0 && j + k <= 7 && addMove && pieceBox[Square(
+                            i - k,
+                            j + k
+                        )] == 'B'
+                    ) {
+                        possibleMoves[Square(i, j)] =
+                            possibleMoves.getOrElse(Square(i, j)) { 0 } + 100000
                     }
                     k = 1 // Проверка вправо-вниз
                     addMove = false
@@ -177,8 +216,13 @@ class ReversiBack {
                         addMove = true
                         k++
                     }
-                    if (i + k <= 7 && j - k >= 0 && addMove && pieceBox[Square(i + k, j - k)] == 'B') {
-                        possibleMoves[Square(i, j)] = possibleMoves.getOrElse(Square(i, j)) {0} + 1000000
+                    if (i + k <= 7 && j - k >= 0 && addMove && pieceBox[Square(
+                            i + k,
+                            j - k
+                        )] == 'B'
+                    ) {
+                        possibleMoves[Square(i, j)] =
+                            possibleMoves.getOrElse(Square(i, j)) { 0 } + 1000000
                     }
                     k = 1 // Проверка влево-вниз
                     addMove = false
@@ -186,188 +230,233 @@ class ReversiBack {
                         addMove = true
                         k++
                     }
-                    if (i - k >= 0 && j - k >= 0 && addMove && pieceBox[Square(i - k, j - k)] == 'B') {
-                        possibleMoves[Square(i, j)] = possibleMoves.getOrElse(Square(i, j)) {0} + 10000000
+                    if (i - k >= 0 && j - k >= 0 && addMove && pieceBox[Square(
+                            i - k,
+                            j - k
+                        )] == 'B'
+                    ) {
+                        possibleMoves[Square(i, j)] =
+                            possibleMoves.getOrElse(Square(i, j)) { 0 } + 10000000
                     }
                 }
             }
     }
 
-    fun moveFromPlayer(attemptToMove: Square, pieceBox: MutableMap<Square, Char>, possibleMoves: MutableMap<Square, Int>,
-                       whiteTurn: Boolean, blackDisks: Array<Int>, whiteDisks: Array<Int>, boardValue: Array<Int>, lastMove: Boolean) {
-       if (!playAsBlack) {
-        if (skipTurn) {
-           this.whiteTurn = !whiteTurn
-           getPossibleMoves(pieceBox, possibleMoves)
-       }
-        if (attemptToMove in possibleMoves) {
-           whiteWin = false
-           blackWin = false
-           pat = false
-           successfulMove = true
-           val x = attemptToMove.x
-           val y = attemptToMove.y
-           pieceBox[Square(x, y)] = if (whiteTurn) 'W' else 'B'
-           if (whiteTurn) {
-               whiteDisks[0]++
-               boardValue[0] = boardValue[0] + pieceValue[Square(x, y)]!!
-           } else {
-               blackDisks[0]++
-               boardValue[0] = boardValue.first() - pieceValue[Square(x, y)]!!
-           }
-           var k = 1
-           if (possibleMoves[Square(x, y)]!! % 10 == 1) // Проверка надо ли переворачивать справа
-               while (pieceBox[Square(x + k, y)] == if (whiteTurn) 'B' else 'W') {
-                   pieceBox[Square(x + k, y)] = if (whiteTurn) 'W' else 'B'
-                   if (whiteTurn) {
-                       blackDisks[0]--
-                       whiteDisks[0]++
-                       boardValue[0] += 2 * pieceValue[Square(x + k, y)]!!
-                   } else {
-                       blackDisks[0]++
-                       whiteDisks[0]--
-                       boardValue[0] -= 2 * pieceValue[Square(x + k, y)]!!
-                   }
-                   k++
-               }
-           possibleMoves[Square(x, y)] = possibleMoves[Square(x, y)]!! / 10
-           k = 1
-           if (possibleMoves[Square(x, y)]!! % 10 == 1) // Проверка надо ли переворачивать слева
-               while (pieceBox[Square(x - k, y)] == if (whiteTurn) 'B' else 'W') {
-                   pieceBox[Square(x - k, y)] = if (whiteTurn) 'W' else 'B'
-                   if (whiteTurn) {
-                       blackDisks[0]--
-                       whiteDisks[0]++
-                       boardValue[0] += 2 * pieceValue[Square(x - k, y)]!!
-                   } else {
-                       blackDisks[0]++
-                       whiteDisks[0]--
-                       boardValue[0] -= 2 * pieceValue[Square(x - k, y)]!!
-                   }
-                   k++
-               }
-           possibleMoves[Square(x, y)] = possibleMoves[Square(x, y)]!! / 10
-           k = 1
-           if (possibleMoves[Square(x, y)]!! % 10 == 1) // Проверка надо ли переворачивать сверху
-               while (pieceBox[Square(x, y + k)] == if (whiteTurn) 'B' else 'W') {
-                   pieceBox[Square(x, y + k)] = if (whiteTurn) 'W' else 'B'
-                   if (whiteTurn) {
-                       blackDisks[0]--
-                       whiteDisks[0]++
-                       boardValue[0] += 2 * pieceValue[Square(x, y + k)]!!
-                   } else {
-                       blackDisks[0]++
-                       whiteDisks[0]--
-                       boardValue[0] -= 2 * pieceValue[Square(x, y + k)]!!
-                   }
-                   k++
-               }
-           possibleMoves[Square(x, y)] = possibleMoves[Square(x, y)]!! / 10
-           k = 1
-           if (possibleMoves[Square(x, y)]!! % 10 == 1) // Проверка надо ли переворачивать снизу
-               while (pieceBox[Square(x, y - k)] == if (whiteTurn) 'B' else 'W') {
-                   pieceBox[Square(x, y - k)] = if (whiteTurn) 'W' else 'B'
-                   if (whiteTurn) {
-                       blackDisks[0]--
-                       whiteDisks[0]++
-                       boardValue[0] += 2 * pieceValue[Square(x, y - k)]!!
-                   } else {
-                       blackDisks[0]++
-                       whiteDisks[0]--
-                       boardValue[0] -= 2 * pieceValue[Square(x, y - k)]!!
-                   }
-                   k++
-               }
-           possibleMoves[Square(x, y)] = possibleMoves[Square(x, y)]!! / 10
-           k = 1
-           if (possibleMoves[Square(x, y)]!! % 10 == 1) // Проверка надо ли переворачивать справа-сверху
-               while (pieceBox[Square(x + k, y + k)] == if (whiteTurn) 'B' else 'W') {
-                   pieceBox[Square(x + k, y + k)] = if (whiteTurn) 'W' else 'B'
-                   if (whiteTurn) {
-                       blackDisks[0]--
-                       whiteDisks[0]++
-                       boardValue[0] += 2 * pieceValue[Square(x + k, y + k)]!!
-                   } else {
-                       blackDisks[0]++
-                       whiteDisks[0]--
-                       boardValue[0] -= 2 * pieceValue[Square(x + k, y + k)]!!
-                   }
-                   k++
-               }
-           possibleMoves[Square(x, y)] = possibleMoves[Square(x, y)]!! / 10
-           k = 1
-           if (possibleMoves[Square(x, y)]!! % 10 == 1) // Проверка надо ли переворачивать слева-сверху
-               while (pieceBox[Square(x - k, y + k)] == if (whiteTurn) 'B' else 'W') {
-                   pieceBox[Square(x - k, y + k)] = if (whiteTurn) 'W' else 'B'
-                   if (whiteTurn) {
-                       blackDisks[0]--
-                       whiteDisks[0]++
-                       boardValue[0] += 2 * pieceValue[Square(x - k, y + k)]!!
-                   } else {
-                       blackDisks[0]++
-                       whiteDisks[0]--
-                       boardValue[0] -= 2 * pieceValue[Square(x - k, y + k)]!!
-                   }
-                   k++
-               }
-           possibleMoves[Square(x, y)] = possibleMoves[Square(x, y)]!! / 10
-           k = 1
-           if (possibleMoves[Square(x, y)]!! % 10 == 1) // Проверка надо ли переворачивать справа-снизу
-               while (pieceBox[Square(x + k, y - k)] == if (whiteTurn) 'B' else 'W') {
-                   pieceBox[Square(x + k, y - k)] = if (whiteTurn) 'W' else 'B'
-                   if (whiteTurn) {
-                       blackDisks[0]--
-                       whiteDisks[0]++
-                       boardValue[0] += 2 * pieceValue[Square(x + k, y - k)]!!
-                   } else {
-                       blackDisks[0]++
-                       whiteDisks[0]--
-                       boardValue[0] -= 2 * pieceValue[Square(x + k, y - k)]!!
-                   }
-                   k++
-               }
-           possibleMoves[Square(x, y)] = possibleMoves[Square(x, y)]!! / 10
-           k = 1
-           if (possibleMoves[Square(x, y)]!! % 10 == 1) // Проверка надо ли переворачивать слева-снизу
-               while (pieceBox[Square(x - k, y - k)] == if (whiteTurn) 'B' else 'W') {
-                   pieceBox[Square(x - k, y - k)] = if (whiteTurn) 'W' else 'B'
-                   if (whiteTurn) {
-                       blackDisks[0]--
-                       whiteDisks[0]++
-                       boardValue[0] += 2 * pieceValue[Square(x - k, y - k)]!!
-                   } else {
-                       blackDisks[0]++
-                       whiteDisks[0]--
-                       boardValue[0] -= 2 * pieceValue[Square(x - k, y - k)]!!
-                   }
-                   k++
-               }
-           possibleMoves.clear()
-            doubleSkipTurn = skipTurn
-           skipTurn = false
-           this.whiteTurn = !whiteTurn
-           getPossibleMoves(pieceBox, possibleMoves)
-           if (possibleMoves.isEmpty()) {
-               skipTurn = true
-               this.whiteTurn = !whiteTurn
-               getPossibleMoves(pieceBox, possibleMoves)
-               if (whiteDisks[0] + blackDisks[0] == 64) {
-                   if (blackDisks[0] > whiteDisks[0]) {
-                       if (lastMove) announceBlackWin = true
-                       blackWin = true
-                   }
-                   if (whiteDisks[0] > blackDisks[0]) {
-                       if (lastMove) announceWhiteWin = true
-                       whiteWin = true
-                   }
-                   if (whiteDisks[0] == blackDisks[0]) {
-                       if (lastMove) announcePat = true
-                       pat = true
-                   }
-               }
-           }
-        } else successfulMove = false
-    }
+    fun moveFromPlayer(
+        attemptToMove: Square,
+        pieceBox: MutableMap<Square, Char>,
+        possibleMoves: MutableMap<Square, Int>,
+        whiteTurn: Boolean,
+        blackDisks: Array<Int>,
+        whiteDisks: Array<Int>,
+        boardValue: Array<Int>,
+        lastMove: Boolean
+    ) {
+        if (!playAsBlack) {
+            if (skipTurn) {
+                this.whiteTurn = !whiteTurn
+                getPossibleMoves(pieceBox, possibleMoves)
+            }
+            if (attemptToMove in possibleMoves) {
+                whiteWin = false
+                blackWin = false
+                pat = false
+                successfulMove = true
+                val x = attemptToMove.x
+                val y = attemptToMove.y
+                pieceBox[Square(x, y)] = if (whiteTurn) 'W' else 'B'
+                if (whiteTurn) {
+                    whiteDisks[0]++
+                    boardValue[0] = boardValue[0] + pieceValue[Square(x, y)]!!
+                } else {
+                    blackDisks[0]++
+                    boardValue[0] = boardValue.first() - pieceValue[Square(x, y)]!!
+                }
+                var k = 1
+                if (possibleMoves[Square(
+                        x,
+                        y
+                    )]!! % 10 == 1
+                ) // Проверка надо ли переворачивать справа
+                    while (pieceBox[Square(x + k, y)] == if (whiteTurn) 'B' else 'W') {
+                        pieceBox[Square(x + k, y)] = if (whiteTurn) 'W' else 'B'
+                        if (whiteTurn) {
+                            blackDisks[0]--
+                            whiteDisks[0]++
+                            boardValue[0] += 2 * pieceValue[Square(x + k, y)]!!
+                        } else {
+                            blackDisks[0]++
+                            whiteDisks[0]--
+                            boardValue[0] -= 2 * pieceValue[Square(x + k, y)]!!
+                        }
+                        k++
+                    }
+                possibleMoves[Square(x, y)] = possibleMoves[Square(x, y)]!! / 10
+                k = 1
+                if (possibleMoves[Square(
+                        x,
+                        y
+                    )]!! % 10 == 1
+                ) // Проверка надо ли переворачивать слева
+                    while (pieceBox[Square(x - k, y)] == if (whiteTurn) 'B' else 'W') {
+                        pieceBox[Square(x - k, y)] = if (whiteTurn) 'W' else 'B'
+                        if (whiteTurn) {
+                            blackDisks[0]--
+                            whiteDisks[0]++
+                            boardValue[0] += 2 * pieceValue[Square(x - k, y)]!!
+                        } else {
+                            blackDisks[0]++
+                            whiteDisks[0]--
+                            boardValue[0] -= 2 * pieceValue[Square(x - k, y)]!!
+                        }
+                        k++
+                    }
+                possibleMoves[Square(x, y)] = possibleMoves[Square(x, y)]!! / 10
+                k = 1
+                if (possibleMoves[Square(
+                        x,
+                        y
+                    )]!! % 10 == 1
+                ) // Проверка надо ли переворачивать сверху
+                    while (pieceBox[Square(x, y + k)] == if (whiteTurn) 'B' else 'W') {
+                        pieceBox[Square(x, y + k)] = if (whiteTurn) 'W' else 'B'
+                        if (whiteTurn) {
+                            blackDisks[0]--
+                            whiteDisks[0]++
+                            boardValue[0] += 2 * pieceValue[Square(x, y + k)]!!
+                        } else {
+                            blackDisks[0]++
+                            whiteDisks[0]--
+                            boardValue[0] -= 2 * pieceValue[Square(x, y + k)]!!
+                        }
+                        k++
+                    }
+                possibleMoves[Square(x, y)] = possibleMoves[Square(x, y)]!! / 10
+                k = 1
+                if (possibleMoves[Square(
+                        x,
+                        y
+                    )]!! % 10 == 1
+                ) // Проверка надо ли переворачивать снизу
+                    while (pieceBox[Square(x, y - k)] == if (whiteTurn) 'B' else 'W') {
+                        pieceBox[Square(x, y - k)] = if (whiteTurn) 'W' else 'B'
+                        if (whiteTurn) {
+                            blackDisks[0]--
+                            whiteDisks[0]++
+                            boardValue[0] += 2 * pieceValue[Square(x, y - k)]!!
+                        } else {
+                            blackDisks[0]++
+                            whiteDisks[0]--
+                            boardValue[0] -= 2 * pieceValue[Square(x, y - k)]!!
+                        }
+                        k++
+                    }
+                possibleMoves[Square(x, y)] = possibleMoves[Square(x, y)]!! / 10
+                k = 1
+                if (possibleMoves[Square(
+                        x,
+                        y
+                    )]!! % 10 == 1
+                ) // Проверка надо ли переворачивать справа-сверху
+                    while (pieceBox[Square(x + k, y + k)] == if (whiteTurn) 'B' else 'W') {
+                        pieceBox[Square(x + k, y + k)] = if (whiteTurn) 'W' else 'B'
+                        if (whiteTurn) {
+                            blackDisks[0]--
+                            whiteDisks[0]++
+                            boardValue[0] += 2 * pieceValue[Square(x + k, y + k)]!!
+                        } else {
+                            blackDisks[0]++
+                            whiteDisks[0]--
+                            boardValue[0] -= 2 * pieceValue[Square(x + k, y + k)]!!
+                        }
+                        k++
+                    }
+                possibleMoves[Square(x, y)] = possibleMoves[Square(x, y)]!! / 10
+                k = 1
+                if (possibleMoves[Square(
+                        x,
+                        y
+                    )]!! % 10 == 1
+                ) // Проверка надо ли переворачивать слева-сверху
+                    while (pieceBox[Square(x - k, y + k)] == if (whiteTurn) 'B' else 'W') {
+                        pieceBox[Square(x - k, y + k)] = if (whiteTurn) 'W' else 'B'
+                        if (whiteTurn) {
+                            blackDisks[0]--
+                            whiteDisks[0]++
+                            boardValue[0] += 2 * pieceValue[Square(x - k, y + k)]!!
+                        } else {
+                            blackDisks[0]++
+                            whiteDisks[0]--
+                            boardValue[0] -= 2 * pieceValue[Square(x - k, y + k)]!!
+                        }
+                        k++
+                    }
+                possibleMoves[Square(x, y)] = possibleMoves[Square(x, y)]!! / 10
+                k = 1
+                if (possibleMoves[Square(
+                        x,
+                        y
+                    )]!! % 10 == 1
+                ) // Проверка надо ли переворачивать справа-снизу
+                    while (pieceBox[Square(x + k, y - k)] == if (whiteTurn) 'B' else 'W') {
+                        pieceBox[Square(x + k, y - k)] = if (whiteTurn) 'W' else 'B'
+                        if (whiteTurn) {
+                            blackDisks[0]--
+                            whiteDisks[0]++
+                            boardValue[0] += 2 * pieceValue[Square(x + k, y - k)]!!
+                        } else {
+                            blackDisks[0]++
+                            whiteDisks[0]--
+                            boardValue[0] -= 2 * pieceValue[Square(x + k, y - k)]!!
+                        }
+                        k++
+                    }
+                possibleMoves[Square(x, y)] = possibleMoves[Square(x, y)]!! / 10
+                k = 1
+                if (possibleMoves[Square(
+                        x,
+                        y
+                    )]!! % 10 == 1
+                ) // Проверка надо ли переворачивать слева-снизу
+                    while (pieceBox[Square(x - k, y - k)] == if (whiteTurn) 'B' else 'W') {
+                        pieceBox[Square(x - k, y - k)] = if (whiteTurn) 'W' else 'B'
+                        if (whiteTurn) {
+                            blackDisks[0]--
+                            whiteDisks[0]++
+                            boardValue[0] += 2 * pieceValue[Square(x - k, y - k)]!!
+                        } else {
+                            blackDisks[0]++
+                            whiteDisks[0]--
+                            boardValue[0] -= 2 * pieceValue[Square(x - k, y - k)]!!
+                        }
+                        k++
+                    }
+                possibleMoves.clear()
+                doubleSkipTurn = skipTurn
+                skipTurn = false
+                this.whiteTurn = !whiteTurn
+                getPossibleMoves(pieceBox, possibleMoves)
+                if (possibleMoves.isEmpty()) {
+                    skipTurn = true
+                    this.whiteTurn = !whiteTurn
+                    getPossibleMoves(pieceBox, possibleMoves)
+                    if (whiteDisks[0] + blackDisks[0] == 64) {
+                        if (blackDisks[0] > whiteDisks[0]) {
+                            if (lastMove) announceBlackWin = true
+                            blackWin = true
+                        }
+                        if (whiteDisks[0] > blackDisks[0]) {
+                            if (lastMove) announceWhiteWin = true
+                            whiteWin = true
+                        }
+                        if (whiteDisks[0] == blackDisks[0]) {
+                            if (lastMove) announcePat = true
+                            pat = true
+                        }
+                    }
+                }
+            } else successfulMove = false
+        }
     }
 
     fun moveFromAI() {
@@ -382,43 +471,75 @@ class ReversiBack {
             playAsBlack = false
             inCycle = true
             val rememberWhiteTurn = whiteTurn
-            var bestMove = if (possibleMoves.isNotEmpty()) possibleMoves.keys.first() else Square(-1, -1)
+            var bestMove =
+                if (possibleMoves.isNotEmpty()) possibleMoves.keys.first() else Square(-1, -1)
             var bestScore = if (rememberWhiteTurn) Int.MIN_VALUE else Int.MAX_VALUE
             val startTime = System.currentTimeMillis() //fetch starting time
             for (move in possibleMoves) {
                 while (System.currentTimeMillis() - startTime < 3000) {
-                val newPieceBox = mutableMapOf<Square, Char>()
-                for (piece in pieceBox)
-                    newPieceBox[piece.key] = piece.value
-                val newPossibleMoves = mutableMapOf<Square, Int>()
-                for (possibleMove in possibleMoves)
-                    newPossibleMoves[possibleMove.key] = possibleMove.value
-                val newWhiteDisks = arrayOf(whiteDisks[0])
-                val newBlackDisks = arrayOf(blackDisks[0])
-                val newBoardValue = arrayOf(boardValue[0])
-                moveFromPlayer(move.key, newPieceBox, newPossibleMoves, rememberWhiteTurn, newBlackDisks, newWhiteDisks, newBoardValue, false)
-                val scoreAI = minimax(pieceBox, possibleMoves, whiteDisks, blackDisks, boardValue,
-                    7, arrayOf(Int.MIN_VALUE), arrayOf(Int.MAX_VALUE), whiteTurn, startTime)
-                if (rememberWhiteTurn) if (scoreAI > bestScore) {
-                    bestScore = scoreAI
-                    bestMove = move.key
-                }
-                if (!rememberWhiteTurn) if (scoreAI < bestScore) {
-                    bestScore = scoreAI
-                    bestMove = move.key
-                }
+                    val newPieceBox = mutableMapOf<Square, Char>()
+                    for (piece in pieceBox)
+                        newPieceBox[piece.key] = piece.value
+                    val newPossibleMoves = mutableMapOf<Square, Int>()
+                    for (possibleMove in possibleMoves)
+                        newPossibleMoves[possibleMove.key] = possibleMove.value
+                    val newWhiteDisks = arrayOf(whiteDisks[0])
+                    val newBlackDisks = arrayOf(blackDisks[0])
+                    val newBoardValue = arrayOf(boardValue[0])
+                    moveFromPlayer(
+                        move.key,
+                        newPieceBox,
+                        newPossibleMoves,
+                        rememberWhiteTurn,
+                        newBlackDisks,
+                        newWhiteDisks,
+                        newBoardValue,
+                        false
+                    )
+                    val scoreAI = minimax(
+                        pieceBox, possibleMoves, whiteDisks, blackDisks, boardValue,
+                        7, arrayOf(Int.MIN_VALUE), arrayOf(Int.MAX_VALUE), whiteTurn, startTime
+                    )
+                    if (rememberWhiteTurn) if (scoreAI > bestScore) {
+                        bestScore = scoreAI
+                        bestMove = move.key
+                    }
+                    if (!rememberWhiteTurn) if (scoreAI < bestScore) {
+                        bestScore = scoreAI
+                        bestMove = move.key
+                    }
                 }
             }
             whiteTurn = rememberWhiteTurn
             inCycle = false
-            moveFromPlayer(bestMove, pieceBox, possibleMoves, whiteTurn, blackDisks, whiteDisks, boardValue, true)
+            moveFromPlayer(
+                bestMove,
+                pieceBox,
+                possibleMoves,
+                whiteTurn,
+                blackDisks,
+                whiteDisks,
+                boardValue,
+                true
+            )
         }
     }
 
-    private fun minimax(pieceBox: MutableMap<Square, Char>, possibleMoves: MutableMap<Square, Int>, whiteDisks: Array<Int>,
-                        blackDisks: Array<Int>, boardValue: Array<Int>, depth: Int, alpha: Array<Int>, beta: Array<Int>, whiteTurn: Boolean, startTime: Long): Int {
+    private fun minimax(
+        pieceBox: MutableMap<Square, Char>,
+        possibleMoves: MutableMap<Square, Int>,
+        whiteDisks: Array<Int>,
+        blackDisks: Array<Int>,
+        boardValue: Array<Int>,
+        depth: Int,
+        alpha: Array<Int>,
+        beta: Array<Int>,
+        whiteTurn: Boolean,
+        startTime: Long
+    ): Int {
         var bestScore: Int
-        if (depth == 0 || whiteWin || blackWin || pat || System.currentTimeMillis() - startTime > 3000) return boardValue[0]
+        if (depth == 0 || whiteWin || blackWin || pat || System.currentTimeMillis() - startTime > 3000)
+            return boardValue[0]
         if (whiteTurn) {
             bestScore = Int.MIN_VALUE
             for (move in possibleMoves.keys) {
@@ -431,8 +552,28 @@ class ReversiBack {
                 val newWhiteDisks = arrayOf(whiteDisks[0])
                 val newBlackDisks = arrayOf(blackDisks[0])
                 val newBoardValue = arrayOf(boardValue[0])
-                moveFromPlayer(move, newPieceBox, newPossibleMoves, false, newBlackDisks, newWhiteDisks, newBoardValue, false)
-                val score = minimax(newPieceBox, newPossibleMoves, newWhiteDisks, newBlackDisks, newBoardValue, depth - 1, alpha, beta, false, startTime)
+                moveFromPlayer(
+                    move,
+                    newPieceBox,
+                    newPossibleMoves,
+                    false,
+                    newBlackDisks,
+                    newWhiteDisks,
+                    newBoardValue,
+                    false
+                )
+                val score = minimax(
+                    newPieceBox,
+                    newPossibleMoves,
+                    newWhiteDisks,
+                    newBlackDisks,
+                    newBoardValue,
+                    depth - 1,
+                    alpha,
+                    beta,
+                    false,
+                    startTime
+                )
                 if (score >= bestScore) bestScore = score
                 val newAlpha = max(alpha[0], bestScore)
                 if (beta[0] < newAlpha) break
@@ -450,8 +591,28 @@ class ReversiBack {
                 val newWhiteDisks = arrayOf(whiteDisks[0])
                 val newBlackDisks = arrayOf(blackDisks[0])
                 val newBoardValue = arrayOf(boardValue[0])
-                moveFromPlayer(move, newPieceBox, newPossibleMoves, true, newBlackDisks, newWhiteDisks, newBoardValue, false)
-                val score = minimax(newPieceBox, newPossibleMoves, newWhiteDisks, newBlackDisks, newBoardValue, depth - 1, alpha, beta, true, startTime)
+                moveFromPlayer(
+                    move,
+                    newPieceBox,
+                    newPossibleMoves,
+                    true,
+                    newBlackDisks,
+                    newWhiteDisks,
+                    newBoardValue,
+                    false
+                )
+                val score = minimax(
+                    newPieceBox,
+                    newPossibleMoves,
+                    newWhiteDisks,
+                    newBlackDisks,
+                    newBoardValue,
+                    depth - 1,
+                    alpha,
+                    beta,
+                    true,
+                    startTime
+                )
                 if (score <= bestScore) bestScore = score
                 val newBeta = min(beta[0], bestScore)
                 if (newBeta < alpha[0]) break
@@ -461,7 +622,7 @@ class ReversiBack {
     }
 
     fun square(x: Int, y: Int): Char? {
-        return pieceBox[Square(x,y)]
+        return pieceBox[Square(x, y)]
     }
 
     fun restart() {
@@ -480,12 +641,12 @@ class ReversiBack {
         boardValue[0] = 0
         for (i in 0..7)
             for (j in 0..7) {
-                pieceBox[Square(i,j)] = '0'
+                pieceBox[Square(i, j)] = '0'
             }
-        pieceBox[Square(3,4)] = 'W'
-        pieceBox[Square(3,3)] = 'B'
-        pieceBox[Square(4,3)] = 'W'
-        pieceBox[Square(4,4)] = 'B'
+        pieceBox[Square(3, 4)] = 'W'
+        pieceBox[Square(3, 3)] = 'B'
+        pieceBox[Square(4, 3)] = 'W'
+        pieceBox[Square(4, 4)] = 'B'
         getPossibleMoves(pieceBox, possibleMoves)
     }
 }

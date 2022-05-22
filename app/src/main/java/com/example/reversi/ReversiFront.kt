@@ -10,7 +10,7 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import java.lang.Integer.min
 
-class ReversiFront(context: Context?, attrs: AttributeSet?): View(context, attrs) {
+class ReversiFront(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     private var startX = 20f
     private var startY = 180f
     private var squareSize = 130f
@@ -50,16 +50,16 @@ class ReversiFront(context: Context?, attrs: AttributeSet?): View(context, attrs
         event ?: return false
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                    val moveX = ((event.x - startX) / squareSize).toInt()
-                    val moveY = 7 - ((event.y - startY) / squareSize).toInt()
-                    reversiConnector?.moveFromPlayer(Square(moveX, moveY))
-                    findViewById<ReversiFront>(R.id.chess_view).invalidate()
-                }
+                val moveX = ((event.x - startX) / squareSize).toInt()
+                val moveY = 7 - ((event.y - startY) / squareSize).toInt()
+                reversiConnector?.moveFromPlayer(Square(moveX, moveY))
+                findViewById<ReversiFront>(R.id.chess_view).invalidate()
+            }
             MotionEvent.ACTION_UP -> {
                 reversiConnector?.moveFromAI()
                 findViewById<ReversiFront>(R.id.chess_view).invalidate()
             }
-            }
+        }
         return true
     }
 
@@ -67,7 +67,11 @@ class ReversiFront(context: Context?, attrs: AttributeSet?): View(context, attrs
         for (row in 0..7)
             for (column in 0..7) {
                 if (reversiConnector?.square(column, row) != '0') {
-                    val frontPieceType: Int = if (reversiConnector?.square(column, row) == 'W') R.drawable.wd else R.drawable.bd
+                    val frontPieceType: Int = if (reversiConnector?.square(
+                            column,
+                            row
+                        ) == 'W'
+                    ) R.drawable.wd else R.drawable.bd
                     loadPieceAt(canvas, column, row, frontPieceType)
                 }
                 reversiConnector!!.returnPossibleMoves().forEach {
@@ -78,7 +82,17 @@ class ReversiFront(context: Context?, attrs: AttributeSet?): View(context, attrs
 
     private fun loadPieceAt(canvas: Canvas, column: Int, row: Int, pieceName: Int) {
         val loadingPiece = bitmaps[pieceName]!!
-        canvas.drawBitmap(loadingPiece, null, RectF(startX + column * squareSize + 10, startY + (7 - row) * squareSize + 10, startX + (column + 1) * squareSize - 10, startY + (8 - row) * squareSize - 10), color)
+        canvas.drawBitmap(
+            loadingPiece,
+            null,
+            RectF(
+                startX + column * squareSize + 10,
+                startY + (7 - row) * squareSize + 10,
+                startX + (column + 1) * squareSize - 10,
+                startY + (8 - row) * squareSize - 10
+            ),
+            color
+        )
     }
 
     private fun loadBitmap() {
