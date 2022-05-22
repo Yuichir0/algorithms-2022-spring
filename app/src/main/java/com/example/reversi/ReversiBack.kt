@@ -418,7 +418,7 @@ class ReversiBack {
     private fun minimax(pieceBox: MutableMap<Square, Char>, possibleMoves: MutableMap<Square, Int>, whiteDisks: Array<Int>,
                         blackDisks: Array<Int>, boardValue: Array<Int>, depth: Int, alpha: Array<Int>, beta: Array<Int>, whiteTurn: Boolean, startTime: Long): Int {
         var bestScore: Int
-        if (depth == 0 || whiteWin || blackWin || pat || skipTurn || System.currentTimeMillis() - startTime > 3000) return boardValue[0]
+        if (depth == 0 || whiteWin || blackWin || pat || System.currentTimeMillis() - startTime > 3000) return boardValue[0]
         if (whiteTurn) {
             bestScore = Int.MIN_VALUE
             for (move in possibleMoves.keys) {
