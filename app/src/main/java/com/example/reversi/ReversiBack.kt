@@ -1,6 +1,5 @@
 package com.example.reversi
 
-import android.util.Log
 import kotlin.math.max
 import kotlin.math.min
 
@@ -8,7 +7,7 @@ class ReversiBack {
     val pieceBox = mutableMapOf<Square, Char>() // Список фигур на доске
     var whiteTurn = true // Переменная для проверки того, кто ходит
     val possibleMoves = mutableMapOf<Square, Int>() // Возможные ходы
-    val boardValue = mutableListOf(0)
+    val boardValue = arrayOf(0)
     private var whiteWin = false
     private var blackWin = false
     private var pat = false
@@ -16,12 +15,13 @@ class ReversiBack {
     var announceBlackWin = false
     var announcePat = false
     var skipTurn = false
-    var doubleSkipTurn = false
-    val blackDisks = mutableListOf(2)
-    val whiteDisks = mutableListOf(2)
+    private var doubleSkipTurn = false
+    var playAsBlack = false
+    val blackDisks = arrayOf(2)
+    val whiteDisks = arrayOf(2)
     private var inCycle = false
     private var successfulMove = false
-    private val pieceValue = mutableMapOf(
+    private val pieceValue = mapOf(
         Pair(Square(0,0), 20000), Pair(Square(1,0), -3000), Pair(Square(2,0), 1000), Pair(Square(3,0), 800), Pair(Square(4,0), 800), Pair(Square(5,0), 1000), Pair(Square(6,0), -3000), Pair(Square(7,0), 20000),
         Pair(Square(0,1), -3000), Pair(Square(1,1), -5000), Pair(Square(2,1), -450), Pair(Square(3,1), -500), Pair(Square(4,1), -500), Pair(Square(5,1), -450), Pair(Square(6,1), -5000), Pair(Square(7,1), -3000),
         Pair(Square(0,2), 1000), Pair(Square(1,2), -450), Pair(Square(2,2), 30), Pair(Square(3,2), 10), Pair(Square(4,2), 10), Pair(Square(5,2), 30), Pair(Square(6,2), -450), Pair(Square(7,2), 1000),
@@ -33,7 +33,7 @@ class ReversiBack {
     )
 
     init {
-        reset()
+        restart()
     }
 
     fun getPossibleMoves(pieceBox: MutableMap<Square, Char>, possibleMoves: MutableMap<Square, Int>) {
@@ -193,8 +193,10 @@ class ReversiBack {
             }
     }
 
-    fun moveFromPlayer(attemptToMove: Square, pieceBox: MutableMap<Square, Char>, possibleMoves: MutableMap<Square, Int>, whiteTurn: Boolean, blackDisks: MutableList<Int>, whiteDisks: MutableList<Int>, boardValue: MutableList<Int>, lastMove: Boolean) {
-       if (skipTurn) {
+    fun moveFromPlayer(attemptToMove: Square, pieceBox: MutableMap<Square, Char>, possibleMoves: MutableMap<Square, Int>,
+                       whiteTurn: Boolean, blackDisks: Array<Int>, whiteDisks: Array<Int>, boardValue: Array<Int>, lastMove: Boolean) {
+       if (!playAsBlack) {
+        if (skipTurn) {
            this.whiteTurn = !whiteTurn
            getPossibleMoves(pieceBox, possibleMoves)
        }
@@ -208,10 +210,10 @@ class ReversiBack {
            pieceBox[Square(x, y)] = if (whiteTurn) 'W' else 'B'
            if (whiteTurn) {
                whiteDisks[0]++
-               boardValue[0] += pieceValue[Square(x, y)]!!
+               boardValue[0] = boardValue[0] + pieceValue[Square(x, y)]!!
            } else {
                blackDisks[0]++
-               boardValue[0] -= pieceValue[Square(x, y)]!!
+               boardValue[0] = boardValue.first() - pieceValue[Square(x, y)]!!
            }
            var k = 1
            if (possibleMoves[Square(x, y)]!! % 10 == 1) // Проверка надо ли переворачивать справа
@@ -366,36 +368,37 @@ class ReversiBack {
            }
         } else successfulMove = false
     }
+    }
 
     fun moveFromAI() {
-      //  Log.d(TAG, "successfulMove = $successfulMove, skipTurn = $skipTurn, whiteTurn = $whiteTurn")
         if (skipTurn) {
             this.whiteTurn = !whiteTurn
             getPossibleMoves(pieceBox, possibleMoves)
         }
-        if (successfulMove && !skipTurn || !successfulMove && skipTurn) {
+        if (successfulMove && !skipTurn || !successfulMove && skipTurn || playAsBlack) {
             if (skipTurn) {
                 whiteTurn = !whiteTurn
             }
+            playAsBlack = false
             inCycle = true
             val rememberWhiteTurn = whiteTurn
             var bestMove = if (possibleMoves.isNotEmpty()) possibleMoves.keys.first() else Square(-1, -1)
             var bestScore = if (rememberWhiteTurn) Int.MIN_VALUE else Int.MAX_VALUE
+            val startTime = System.currentTimeMillis() //fetch starting time
             for (move in possibleMoves) {
+                while (System.currentTimeMillis() - startTime < 3000) {
                 val newPieceBox = mutableMapOf<Square, Char>()
                 for (piece in pieceBox)
                     newPieceBox[piece.key] = piece.value
                 val newPossibleMoves = mutableMapOf<Square, Int>()
                 for (possibleMove in possibleMoves)
                     newPossibleMoves[possibleMove.key] = possibleMove.value
-                val newWhiteDisks = mutableListOf<Int>()
-                newWhiteDisks.add(whiteDisks[0])
-                val newBlackDisks = mutableListOf<Int>()
-                newBlackDisks.add(blackDisks[0])
-                val newBoardValue = mutableListOf<Int>()
-                newBoardValue.add(boardValue[0])
+                val newWhiteDisks = arrayOf(whiteDisks[0])
+                val newBlackDisks = arrayOf(blackDisks[0])
+                val newBoardValue = arrayOf(boardValue[0])
                 moveFromPlayer(move.key, newPieceBox, newPossibleMoves, rememberWhiteTurn, newBlackDisks, newWhiteDisks, newBoardValue, false)
-                val scoreAI = minimax(pieceBox, possibleMoves, whiteDisks, blackDisks, boardValue, 4, Int.MIN_VALUE, Int.MAX_VALUE, whiteTurn)
+                val scoreAI = minimax(pieceBox, possibleMoves, whiteDisks, blackDisks, boardValue,
+                    7, arrayOf(Int.MIN_VALUE), arrayOf(Int.MAX_VALUE), whiteTurn, startTime)
                 if (rememberWhiteTurn) if (scoreAI > bestScore) {
                     bestScore = scoreAI
                     bestMove = move.key
@@ -404,17 +407,18 @@ class ReversiBack {
                     bestScore = scoreAI
                     bestMove = move.key
                 }
+                }
             }
-       //     Log.d(TAG, "moveAI = $bestScore, $bestMove")
-                   whiteTurn = rememberWhiteTurn
+            whiteTurn = rememberWhiteTurn
             inCycle = false
             moveFromPlayer(bestMove, pieceBox, possibleMoves, whiteTurn, blackDisks, whiteDisks, boardValue, true)
         }
     }
 
-    private fun minimax(pieceBox: MutableMap<Square, Char>, possibleMoves: MutableMap<Square, Int>, whiteDisks: MutableList<Int>, blackDisks: MutableList<Int>, boardValue: MutableList<Int>, depth: Int, alpha: Int, beta: Int, whiteTurn: Boolean): Int {
+    private fun minimax(pieceBox: MutableMap<Square, Char>, possibleMoves: MutableMap<Square, Int>, whiteDisks: Array<Int>,
+                        blackDisks: Array<Int>, boardValue: Array<Int>, depth: Int, alpha: Array<Int>, beta: Array<Int>, whiteTurn: Boolean, startTime: Long): Int {
         var bestScore: Int
-        if (depth == 0 || whiteWin || blackWin || pat) return boardValue[0]
+        if (depth == 0 || whiteWin || blackWin || pat || skipTurn || System.currentTimeMillis() - startTime > 3000) return boardValue[0]
         if (whiteTurn) {
             bestScore = Int.MIN_VALUE
             for (move in possibleMoves.keys) {
@@ -424,20 +428,14 @@ class ReversiBack {
                 val newPossibleMoves = mutableMapOf<Square, Int>()
                 for (possibleMove in possibleMoves)
                     newPossibleMoves[possibleMove.key] = possibleMove.value
-                val newWhiteDisks = mutableListOf<Int>()
-                newWhiteDisks.add(whiteDisks[0])
-                val newBlackDisks = mutableListOf<Int>()
-                newBlackDisks.add(blackDisks[0])
-                val newBoardValue = mutableListOf<Int>()
-                newBoardValue.add(boardValue[0])
+                val newWhiteDisks = arrayOf(whiteDisks[0])
+                val newBlackDisks = arrayOf(blackDisks[0])
+                val newBoardValue = arrayOf(boardValue[0])
                 moveFromPlayer(move, newPieceBox, newPossibleMoves, false, newBlackDisks, newWhiteDisks, newBoardValue, false)
-                val score = minimax(newPieceBox, newPossibleMoves, newWhiteDisks, newBlackDisks, newBoardValue, depth - 1, alpha, beta, false)
-                if (score >= bestScore) {
-                    bestScore = score
-                }
-                val newAlpha = max(alpha, bestScore)
-             //   Log.d(TAG, "alpha = $alpha, beta = $beta")
-                if (beta < newAlpha) break
+                val score = minimax(newPieceBox, newPossibleMoves, newWhiteDisks, newBlackDisks, newBoardValue, depth - 1, alpha, beta, false, startTime)
+                if (score >= bestScore) bestScore = score
+                val newAlpha = max(alpha[0], bestScore)
+                if (beta[0] < newAlpha) break
             }
             return bestScore
         } else {
@@ -449,20 +447,14 @@ class ReversiBack {
                 val newPossibleMoves = mutableMapOf<Square, Int>()
                 for (possibleMove in possibleMoves)
                     newPossibleMoves[possibleMove.key] = possibleMove.value
-                val newWhiteDisks = mutableListOf<Int>()
-                newWhiteDisks.add(whiteDisks[0])
-                val newBlackDisks = mutableListOf<Int>()
-                newBlackDisks.add(blackDisks[0])
-                val newBoardValue = mutableListOf<Int>()
-                newBoardValue.add(boardValue[0])
+                val newWhiteDisks = arrayOf(whiteDisks[0])
+                val newBlackDisks = arrayOf(blackDisks[0])
+                val newBoardValue = arrayOf(boardValue[0])
                 moveFromPlayer(move, newPieceBox, newPossibleMoves, true, newBlackDisks, newWhiteDisks, newBoardValue, false)
-                val score = minimax(newPieceBox, newPossibleMoves, newWhiteDisks, newBlackDisks, newBoardValue, depth - 1, alpha, beta, true)
-                if (score <= bestScore) {
-                    bestScore = score
-                }
-                val newBeta = min(beta, bestScore)
-            //    Log.d(TAG, "alpha = $alpha, beta = $beta")
-                if (newBeta < alpha) break
+                val score = minimax(newPieceBox, newPossibleMoves, newWhiteDisks, newBlackDisks, newBoardValue, depth - 1, alpha, beta, true, startTime)
+                if (score <= bestScore) bestScore = score
+                val newBeta = min(beta[0], bestScore)
+                if (newBeta < alpha[0]) break
             }
             return bestScore
         }
@@ -472,7 +464,7 @@ class ReversiBack {
         return pieceBox[Square(x,y)]
     }
 
-    fun reset() {
+    fun restart() {
         whiteTurn = true
         pieceBox.clear()
         possibleMoves.clear()
@@ -495,6 +487,5 @@ class ReversiBack {
         pieceBox[Square(4,3)] = 'W'
         pieceBox[Square(4,4)] = 'B'
         getPossibleMoves(pieceBox, possibleMoves)
-
     }
 }
