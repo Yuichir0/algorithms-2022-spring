@@ -65,11 +65,11 @@ class ReversiFront(context: Context?, attrs: AttributeSet?) : View(context, attr
     private fun loadPieces(canvas: Canvas) {
         for (row in 0..7)
             for (column in 0..7) {
-                if (reversiConnector?.square(column, row) != '0') {
+                if (reversiConnector?.square(column, row) != SquarePiece.NONE) {
                     val frontPieceType: Int = if (reversiConnector?.square(
                             column,
                             row
-                        ) == 'W'
+                        ) == SquarePiece.WHITE
                     ) R.drawable.wd else R.drawable.bd
                     loadPieceAt(canvas, column, row, frontPieceType)
                 }

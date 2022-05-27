@@ -4,7 +4,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 class ReversiBack {
-    val pieceBox = mutableMapOf<Square, Char>() // Список фигур на доске
+    val pieceBox = mutableMapOf<Square, SquarePiece>() // Список фигур на доске
     var whiteTurn = true // Переменная для проверки того, кто ходит
     val possibleMoves = mutableMapOf<Square, Int>() // Возможные ходы
     val boardValue = arrayOf(0)
@@ -37,20 +37,20 @@ class ReversiBack {
     }
 
     fun getPossibleMoves(
-        pieceBox: MutableMap<Square, Char>,
+        pieceBox: MutableMap<Square, SquarePiece>,
         possibleMoves: MutableMap<Square, Int>
     ) {
         var addMove: Boolean
         var k: Int
         for (i in 0..7)
             for (j in 0..7) {
-                if (pieceBox[Square(i, j)] == '0') {
+                if (pieceBox[Square(i, j)] == SquarePiece.NONE) {
                     k = 1 // Проверка вправо
                     addMove = false
                     while (i + k <= 7 && pieceBox[Square(
                             i + k,
                             j
-                        )] == if (whiteTurn) 'B' else 'W'
+                        )] == if (whiteTurn) SquarePiece.BLACK else SquarePiece.WHITE
                     ) {
                         addMove = true
                         k++
@@ -58,7 +58,7 @@ class ReversiBack {
                     if (i + k <= 7 && addMove && pieceBox[Square(
                             i + k,
                             j
-                        )] == if (whiteTurn) 'W' else 'B'
+                        )] == if (whiteTurn) SquarePiece.WHITE else SquarePiece.BLACK
                     ) {
                         possibleMoves[Square(i, j)] = 1
                     }
@@ -67,7 +67,7 @@ class ReversiBack {
                     while (i - k >= 0 && pieceBox[Square(
                             i - k,
                             j
-                        )] == if (whiteTurn) 'B' else 'W'
+                        )] == if (whiteTurn) SquarePiece.BLACK else SquarePiece.WHITE
                     ) {
                         addMove = true
                         k++
@@ -75,7 +75,7 @@ class ReversiBack {
                     if (i - k >= 0 && addMove && pieceBox[Square(
                             i - k,
                             j
-                        )] == if (whiteTurn) 'W' else 'B'
+                        )] == if (whiteTurn) SquarePiece.WHITE else SquarePiece.BLACK
                     ) {
                         possibleMoves[Square(i, j)] =
                             possibleMoves.getOrElse(Square(i, j)) { 0 } + 10
@@ -85,7 +85,7 @@ class ReversiBack {
                     while (j + k <= 7 && pieceBox[Square(
                             i,
                             j + k
-                        )] == if (whiteTurn) 'B' else 'W'
+                        )] == if (whiteTurn) SquarePiece.BLACK else SquarePiece.WHITE
                     ) {
                         addMove = true
                         k++
@@ -93,7 +93,7 @@ class ReversiBack {
                     if (j + k <= 7 && addMove && pieceBox[Square(
                             i,
                             j + k
-                        )] == if (whiteTurn) 'W' else 'B'
+                        )] == if (whiteTurn) SquarePiece.WHITE else SquarePiece.BLACK
                     ) {
                         possibleMoves[Square(i, j)] =
                             possibleMoves.getOrElse(Square(i, j)) { 0 } + 100
@@ -103,7 +103,7 @@ class ReversiBack {
                     while (j - k >= 0 && pieceBox[Square(
                             i,
                             j - k
-                        )] == if (whiteTurn) 'B' else 'W'
+                        )] == if (whiteTurn) SquarePiece.BLACK else SquarePiece.WHITE
                     ) {
                         addMove = true
                         k++
@@ -111,7 +111,7 @@ class ReversiBack {
                     if (j - k >= 0 && addMove && pieceBox[Square(
                             i,
                             j - k
-                        )] == if (whiteTurn) 'W' else 'B'
+                        )] == if (whiteTurn) SquarePiece.WHITE else SquarePiece.BLACK
                     ) {
                         possibleMoves[Square(i, j)] =
                             possibleMoves.getOrElse(Square(i, j)) { 0 } + 1000
@@ -121,7 +121,7 @@ class ReversiBack {
                     while (i + k <= 7 && j + k <= 7 && pieceBox[Square(
                             i + k,
                             j + k
-                        )] == if (whiteTurn) 'B' else 'W'
+                        )] == if (whiteTurn) SquarePiece.BLACK else SquarePiece.WHITE
                     ) {
                         addMove = true
                         k++
@@ -129,7 +129,7 @@ class ReversiBack {
                     if (i + k <= 7 && j + k <= 7 && addMove && pieceBox[Square(
                             i + k,
                             j + k
-                        )] == if (whiteTurn) 'W' else 'B'
+                        )] == if (whiteTurn) SquarePiece.WHITE else SquarePiece.BLACK
                     ) {
                         possibleMoves[Square(i, j)] =
                             possibleMoves.getOrElse(Square(i, j)) { 0 } + 10000
@@ -139,7 +139,7 @@ class ReversiBack {
                     while (i - k >= 0 && j + k <= 7 && pieceBox[Square(
                             i - k,
                             j + k
-                        )] == if (whiteTurn) 'B' else 'W'
+                        )] == if (whiteTurn) SquarePiece.BLACK else SquarePiece.WHITE
                     ) {
                         addMove = true
                         k++
@@ -147,7 +147,7 @@ class ReversiBack {
                     if (i - k >= 0 && j + k <= 7 && addMove && pieceBox[Square(
                             i - k,
                             j + k
-                        )] == if (whiteTurn) 'W' else 'B'
+                        )] == if (whiteTurn) SquarePiece.WHITE else SquarePiece.BLACK
                     ) {
                         possibleMoves[Square(i, j)] =
                             possibleMoves.getOrElse(Square(i, j)) { 0 } + 100000
@@ -157,7 +157,7 @@ class ReversiBack {
                     while (i + k <= 7 && j - k >= 0 && pieceBox[Square(
                             i + k,
                             j - k
-                        )] == if (whiteTurn) 'B' else 'W'
+                        )] == if (whiteTurn) SquarePiece.BLACK else SquarePiece.WHITE
                     ) {
                         addMove = true
                         k++
@@ -165,7 +165,7 @@ class ReversiBack {
                     if (i + k <= 7 && j - k >= 0 && addMove && pieceBox[Square(
                             i + k,
                             j - k
-                        )] == if (whiteTurn) 'W' else 'B'
+                        )] == if (whiteTurn) SquarePiece.WHITE else SquarePiece.BLACK
                     ) {
                         possibleMoves[Square(i, j)] =
                             possibleMoves.getOrElse(Square(i, j)) { 0 } + 1000000
@@ -175,7 +175,7 @@ class ReversiBack {
                     while (i - k >= 0 && j - k >= 0 && pieceBox[Square(
                             i - k,
                             j - k
-                        )] == if (whiteTurn) 'B' else 'W'
+                        )] == if (whiteTurn) SquarePiece.BLACK else SquarePiece.WHITE
                     ) {
                         addMove = true
                         k++
@@ -183,7 +183,7 @@ class ReversiBack {
                     if (i - k >= 0 && j - k >= 0 && addMove && pieceBox[Square(
                             i - k,
                             j - k
-                        )] == if (whiteTurn) 'W' else 'B'
+                        )] == if (whiteTurn) SquarePiece.WHITE else SquarePiece.BLACK
                     ) {
                         possibleMoves[Square(i, j)] =
                             possibleMoves.getOrElse(Square(i, j)) { 0 } + 10000000
@@ -193,7 +193,7 @@ class ReversiBack {
     }
 
     fun moveFromPlayer(
-        attemptToMove: Square, pieceBox: MutableMap<Square, Char>,
+        attemptToMove: Square, pieceBox: MutableMap<Square, SquarePiece>,
         possibleMoves: MutableMap<Square, Int>, whiteTurn: Boolean, blackDisks: Array<Int>,
         whiteDisks: Array<Int>, boardValue: Array<Int>, lastMove: Boolean
     ) {
@@ -209,7 +209,7 @@ class ReversiBack {
             successfulMove = true
             val x = attemptToMove.x
             val y = attemptToMove.y
-            pieceBox[Square(x, y)] = if (whiteTurn) 'W' else 'B'
+            pieceBox[Square(x, y)] = if (whiteTurn) SquarePiece.WHITE else SquarePiece.BLACK
             if (whiteTurn) {
                 whiteDisks[0]++
                 boardValue[0] = boardValue[0] + pieceValue[Square(x, y)]!!
@@ -241,8 +241,8 @@ class ReversiBack {
                         7 -> y - k
                         else -> y - k
                     }
-                    while (pieceBox[Square(newX, newY)] == if (whiteTurn) 'B' else 'W') {
-                        pieceBox[Square(newX, newY)] = if (whiteTurn) 'W' else 'B'
+                    while (pieceBox[Square(newX, newY)] == if (whiteTurn) SquarePiece.BLACK else SquarePiece.WHITE) {
+                        pieceBox[Square(newX, newY)] = if (whiteTurn) SquarePiece.WHITE else SquarePiece.BLACK
                         if (whiteTurn) {
                             blackDisks[0]--
                             whiteDisks[0]++
@@ -358,7 +358,7 @@ class ReversiBack {
     }
 
     private fun minimax(
-        pieceBox: MutableMap<Square, Char>, possibleMoves: MutableMap<Square, Int>,
+        pieceBox: MutableMap<Square, SquarePiece>, possibleMoves: MutableMap<Square, Int>,
         whiteDisks: Array<Int>, blackDisks: Array<Int>, boardValue: Array<Int>, depth: Int,
         alpha: Array<Int>, beta: Array<Int>, whiteTurn: Boolean, startTime: Long
     ): Int {
@@ -391,7 +391,7 @@ class ReversiBack {
         return bestScore
     }
 
-    fun square(x: Int, y: Int): Char? {
+    fun square(x: Int, y: Int): SquarePiece? {
         return pieceBox[Square(x, y)]
     }
 
@@ -411,12 +411,12 @@ class ReversiBack {
         boardValue[0] = 0
         for (i in 0..7)
             for (j in 0..7) {
-                pieceBox[Square(i, j)] = '0'
+                pieceBox[Square(i, j)] = SquarePiece.NONE
             }
-        pieceBox[Square(3, 4)] = 'W'
-        pieceBox[Square(3, 3)] = 'B'
-        pieceBox[Square(4, 3)] = 'W'
-        pieceBox[Square(4, 4)] = 'B'
+        pieceBox[Square(3, 4)] = SquarePiece.WHITE
+        pieceBox[Square(3, 3)] = SquarePiece.BLACK
+        pieceBox[Square(4, 3)] = SquarePiece.WHITE
+        pieceBox[Square(4, 4)] = SquarePiece.BLACK
         getPossibleMoves(pieceBox, possibleMoves)
     }
 }

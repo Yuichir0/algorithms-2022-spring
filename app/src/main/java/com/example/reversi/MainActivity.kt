@@ -6,8 +6,6 @@ import android.widget.Button
 import android.widget.Toast
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-const val TAG = "MainActivity"
-
 class MainActivity : AppCompatActivity(), ReversiConnector {
 
     private val reversiBack = ReversiBack()
@@ -38,8 +36,8 @@ class MainActivity : AppCompatActivity(), ReversiConnector {
             .show()
     }
 
-    override fun square(x: Int, y: Int): Char? {
-        return reversiBack.square(x, y)
+    override fun square(x: Int, y: Int): SquarePiece {
+        return reversiBack.square(x, y)!!
     }
 
     override fun moveFromPlayer(moveFromPlayer: Square) {
