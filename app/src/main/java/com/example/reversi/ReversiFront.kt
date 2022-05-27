@@ -40,7 +40,6 @@ class ReversiFront(context: Context?, attrs: AttributeSet?) : View(context, attr
         squareSize = (chessBoardSide / 8).toFloat()
         startX = ((width - chessBoardSide) / 2).toFloat()
         startY = ((height - chessBoardSide) / 2).toFloat()
-
         createChessBoard(canvas)
         loadPieces(canvas)
     }

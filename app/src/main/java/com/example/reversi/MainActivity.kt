@@ -15,7 +15,6 @@ class MainActivity : AppCompatActivity(), ReversiConnector {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //Log.d(TAG, "$reversiBack")
         val reversiFront: ReversiFront = findViewById(R.id.chess_view)
         reversiFront.reversiConnector = this
         restartButton()
@@ -31,7 +30,7 @@ class MainActivity : AppCompatActivity(), ReversiConnector {
             .setTitle("New game")
             .setMessage("Choose side")
             .setNeutralButton("Play as black") { _, _ ->
-                reversiBack.playAsBlack = true
+                reversiBack.skipFirstWhiteTurn = true
             }
             .setPositiveButton("Play as white") { _, _ ->
             }
@@ -45,14 +44,9 @@ class MainActivity : AppCompatActivity(), ReversiConnector {
 
     override fun moveFromPlayer(moveFromPlayer: Square) {
         reversiBack.moveFromPlayer(
-            Square(moveFromPlayer.x, moveFromPlayer.y),
-            reversiBack.pieceBox,
-            reversiBack.possibleMoves,
-            reversiBack.whiteTurn,
-            reversiBack.blackDisks,
-            reversiBack.whiteDisks,
-            reversiBack.boardValue,
-            true
+            Square(moveFromPlayer.x, moveFromPlayer.y), reversiBack.pieceBox,
+            reversiBack.possibleMoves, reversiBack.whiteTurn, reversiBack.blackDisks,
+            reversiBack.whiteDisks, reversiBack.boardValue, true
         )
         if (reversiBack.announceWhiteWin) Toast.makeText(
             applicationContext,
